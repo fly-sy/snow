@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+    <head>
+        <!--声明当前页面编码集（中文编码<gbk,gb2312>,国际编码<utf-8>-->
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <!--声明当前页面的三要素-->
+        <title>Document</title>
+        <meta name="Keywords" content="关键词，关键词">
+        <meta name="Description" content="">
+
+		<style>
+			*{margin:0;padding:0;}
+			html{overflow:hidden;}
+			body{background:url("images/3.jpg") no-repeat fixed top left;background-size:cover;}
+		</style>
+    </head>
+	<body>
+
+		<canvas id="canvas"></canvas>
+		<!--
+			canvas元素是用于在网页上绘制图像的，它本身没有绘图能力，所有的绘制工作必须在javascript内部完成
+		-->
+		<embed src="music/1.mp3"/><!--插入音频文件的标签-->
+
+	</body>
+	<script type="text/javascript">
+			//var s = window.screen;//获取浏览器的屏幕
+			var W = document.documentElement.clientWidth;//获取浏览器的宽度
+			var H = document.documentElement.clientHeight;//获取浏览器的宽度
+
+
+			var canvas = document.getElementById("canvas");/*使用id寻找canvas*/
+			canvas.width = W;//使画布等于浏览器的宽度
+			canvas.height = H;//使画布等于浏览器的高度
+			var cxt = canvas.getContext("2d");/*getContext("2d")对象是内建的html5对象，它拥有多种绘制路径、矩形、圆形、字符以及添加图像的方法。创建上下文（即context）对象。*/
+
+
+			var mp = 60; /*添加雪花的个数*/
+			//创建数组 存放雪花的坐标
+			var particles = [];
+      		//遍历随机初始化雪花 x  y  坐标
+			for(var i = 0; i < mp; i++)
+			{
+				particles.push({
+					x: Math.random()*W,//Math.random是取随机数 X轴方向
+					y: Math.random()*H,//Y轴方向
+
+					r: Math.random()*2+1, //随机取雪花的大小
+				})
+			}
+			//alert(particles[45].x);
+
+			function draw()
+			{
+				cxt.shadowColor = "red";//开始绘画雪花阴影的颜色
+				cxt.shadowOffsetX = 0;//阴影的水平偏移量
+				cxt.shadowOffsetY = 0;//
+				cxt.shadowBlur = 10;//阴影模糊度
+				cxt.clearRect(0,0, W, H);//清除整个画布
+				cxt.fillStyle = "#fff";//雪花的填充颜色，否则是空心
+				cxt.strokeStyle="rgba(255,225,225,.5)";//圆的边线颜色
+				/* cxt.fillStyle = "#FF0000";*/
+				cxt.beginPath();//开始绘画的路径
+				//遍历得到每一个雪花的坐标
+				for(var i = 0; i < mp; i++)
+				{
+					var p = particles[i];
+
+					cxt.moveTo(p.x, p.y);//确定圆心点的坐标
+					cxt.arc(p.x, p.y, p.r, 0, Math.PI*2);//画圆的函数
+
+
+				}
+
+				cxt.fill();//正式的填充
+
+				cxt.stroke();//正式的绘画
+
+				updates();
+			}
+
+			function updates() {
+				for(var i = 0; i < mp; i++){
+					var p = particles[i];
+					// y 随机的步长
+					p.y+=Math.random()*15;
+					if(p.y>H){
+						p.y=0
+					}
+				}
+			}
+
+			setInterval(draw, 15);
+
+	</script>
+</html>
+
